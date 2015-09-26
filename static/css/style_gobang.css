@@ -163,3 +163,62 @@ body{
 	outline: none; 
 	background: #edcfb6
 }
+
+.timer{
+	font-size: 20px;
+	font-weight: bold;
+	position: absolute;
+	left:60%;
+}
+#timer1{
+	top:90%;
+}
+#timer2{
+	top:90%;
+}
+.pop_out{
+	background: #ffffff;
+	position: fixed;
+	width: 180px;
+	height: 100px;
+	text-align: center;
+	line-height: 40px;
+	color: #333333;
+	display: none;
+	box-shadow: 3px 3px 10px #333;
+	border-radius: 3px;
+	font-size: 0.8em;
+}
+
+.sure{
+	position: absolute;
+	left:45px;
+	bottom:5px;
+	height:20px;
+	width:50px;
+}
+
+.cancel{
+	position: absolute;
+	right:25px;
+	bottom:5px;
+	height:20px;
+	width:50px;
+}
+.kick{
+	position:absolute;
+	top:0;
+	left:80%;
+	display: none;
+}
+#kick2{
+	display: block;
+}
+.roomid{
+	display: none;
+}
+.current_state{
+	position:absolute;
+	left:10px;
+	bottom:5px;
+}

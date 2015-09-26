@@ -23,34 +23,52 @@ def user_number(request):
     return JsonResponse(user_num, safe=False)
 
 
-# 在频道中获取各种数据信息
-def lobby_data(request):
-    lobby_dict = {}
-    lid = request.GET['lid']
-    lobby_users = User.objects.filter(lobby_id=lid)
-    lobby_user_list = []
-    for user in lobby_users:
-        lobby_user_list.append(to_dict(user))
-    lobby_dict['lobby_users'] = lobby_user_list
-    return JsonResponse(lobby_dict)
-
-
 # 主页显示
 def home(request):
+    # for i in range(0, 40):
+    #     room = Room()
+    #     room.rid = i
+    #     room.lobby_id = 1
+    #     room.game_id = 0
+    #     room.user_id_1 = ""
+    #     room.user_id_2 = ""
+    #     room.color_1 = 0
+    #     room.color_2 = 0
+    #     room.game_request = 0
+    #     room.start_1 = 0
+    #     room.start_2 = 0
+    #     room.save()
+
+
     form = RegisterForm()
     all_lobbies = Lobby.objects.all()
     lobbies = []
     lobby_length = all_lobbies.__len__()
     for i in range(0, lobby_length):
+        user_num = User.objects.filter(lobby_id=(i+1)).__len__()
         lobby = {
-            'user_num': User.objects.filter(lobby_id=(i+1)).__len__(),
+            'user_num': user_num,
             'lobby_name': all_lobbies[i].name
         }
         lobbies.append(lobby)
-    return render_to_response("index.html", {
-        'form': form,
-        'lobbies': lobbies,
-    }, context_instance=RequestContext(request))
+    # judge if user has logged in
+    if 'has_loggedin' in request.session:
+        if request.session['has_loggedin']:
+            cur_user = User.objects.get(uid=request.session['uid'])
+            userdict = {'uid': cur_user.uid, 'name': cur_user.name, 'iconnum': cur_user.iconnum}
+            into_lobby_form = IntoLobbyForm()
+            return render(request, 'login_complete.html', {
+                'Dict': json.dumps(userdict),
+                'lobbies': lobbies,
+                'into_lobby_form': into_lobby_form,
+            })
+        else:
+            return render_to_response("index.html",
+                                      {'form': form, 'lobbies': lobbies, }, context_instance=RequestContext(request))
+    else:
+        request.session['has_loggedin'] = False;
+        return render_to_response("index.html",
+                                  {'form': form, 'lobbies': lobbies, }, context_instance=RequestContext(request))
 
 
 # 大厅显示
@@ -99,17 +117,28 @@ def gobang(request):
             room_id = form.cleaned_data['rid']
             lobby_id = form.cleaned_data['lid']
 
+
             # 获取用户信息
             curr_user = User.objects.filter(uid=user_id)[0]
 
             # 玩家进入房间
             in_room = Room.objects.filter(rid=room_id)[0]
-            if in_room.user_id_1 == "":
+            all_rooms = Room.objects.all()
+            have_room = False
+            for room in all_rooms:
+                if room.user_id_1 == curr_user.uid or room.user_id_2 == curr_user.uid:
+                    have_room = True
+                    break
+            if have_room:
+                return HttpResponse("同一用户不能进入多个房间！")
+            elif in_room.user_id_1 == "":
                 in_room.user_id_1 = curr_user.uid
                 in_room.save()
+                user = {'id': 1}
             elif in_room.user_id_2 == "":
                 in_room.user_id_2 = curr_user.uid
                 in_room.save()
+                user = {'id': 2, 'room': room_id}
             else:
                 return HttpResponse("人满了！")
 
@@ -126,7 +155,28 @@ def gobang(request):
             else:
                 player_2 = {}
 
+            room = {'id': room_id}
+            add_step_form = AddStepForm()
+            get_new_step_form = GetNewStepForm()
+            game_over_form = GameOverForm()
+            wait_for_player = WaitForPlayerForm()
+            ready_for_game = ReadyForGameForm()
+            wait_for_player_ready = WaitForPlayerReadyForm()
+            save_player_game_request = SavePlayerGameRequestForm()
+            load_player_game_request = LoadPlayerGameRequestForm()
+            init_room_info = InitRoomInfoForm()
             return render_to_response("gobang.html", {
+                'init_room_info': init_room_info,
+                'room': json.dumps(room),
+                'user': json.dumps(user),
+                'add_step_form': add_step_form,
+                'save_player_game_request': save_player_game_request,
+                'load_player_game_request': load_player_game_request,
+                'get_new_step_form': get_new_step_form,
+                'wait_for_player': wait_for_player,
+                'ready_for_game': ready_for_game,
+                'wait_for_player_ready': wait_for_player_ready,
+                'game_over_form': game_over_form,
                 'player_1': json.dumps(player_1),
                 'player_2': json.dumps(player_2),
             }, context_instance=RequestContext(request))

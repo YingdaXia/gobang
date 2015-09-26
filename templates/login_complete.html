@@ -25,6 +25,10 @@
                 document.name_form.action = "/changename/";
                 document.name_form.submit();
             }
+            function relog(){
+                document.relog_form.action = "/relog/";
+                document.relog_form.submit();
+            }
         </script>
 	</head>
 	<body>
@@ -34,6 +38,8 @@
             <div id="userinfo"></div>
             <button id="changepassword">修改密码</button>
             <button id="changename">修改昵称和头像</button>
+            <a href='#' id="relog" onclick="relog()">注销</a>
+            <form name="relog_form" method="GET"></form>
 		</div>
 		<div class='room_box'>
 			<img src='/static/image/login_logo.gif'>
@@ -58,7 +64,7 @@
 			    </div>
                 <div class='form-group'>
 				    <lable for='createpassword1'>请再次输入新密码：</lable>
-				    <input type='password' class='form-control' id='newpassword1' placeholder='password agian' name="password_again">
+				    <input type='password' class='form-control' id='newpassword1' placeholder='password again' name="password_again">
 			    </div>
                 <input class="userid" type="text" value="" name="password_uid">
             </form>
@@ -69,7 +75,7 @@
             <form name="name_form" method="get">
 			    <div class='form-group'>
 				    <lable for='createpassword1'>请输入你的新昵称：</lable>
-				    <input type='text' class='form-control' id='newpassword' placeholder='new nickname' name="new_name">
+				    <input type='text' class='form-control' id='newname' placeholder='new nickname' name="new_name">
 			    </div>
 			    <div class='chooseicon' id="newicon">
 				    <lable>请选择一个头像:</lable>
@@ -187,6 +193,7 @@
                     }
                 });
             }
+            $(".iconbox").eq(user.iconnum-1).css("border", "5px solid red");
             $("#confirm1").css("top","90%");
             $("#cancel1").css("top","90%");
         });
@@ -194,5 +201,6 @@
         document.getElementsByClassName('userid')[0].value = user.uid;
         document.getElementsByClassName('userid')[1].value = user.uid;
         document.getElementById('iconnum').value = user.iconnum;
+        document.getElementById('newname').value = user.name;
     </script>
 </html>

@@ -1,11 +1,12 @@
 # coding: utf-8
 
-from logic.forms import *
-from logic.tools import *
+from .forms import *
+from .tools import *
+from .models import *
 from django.http import HttpResponseRedirect
 from django.http import HttpResponse
 from django.shortcuts import render, render_to_response
-from logic.models import *
+from django.template import RequestContext
 import json
 
 __author__ = '英达'
@@ -21,19 +22,71 @@ def register(request):
         password_again = request.GET['reg_password_again']
         new_user.name = request.GET['reg_name']
         new_user.lobby_id = 0
-        if new_user.password == password_again:
+        new_user.iconnum = request.GET['iconnum']
+        new_user.status = 10000
+        new_user.latest_time = "2015-01-01 12:00:00"
+        new_user.score = 0
+        new_user.win_num = 0
+        new_user.tie_num = 0
+        new_user.lose_num = 0
+        dict1 = {'login': '0', 'reg': '0' }
+        form = RegisterForm()
+        all_lobbies = Lobby.objects.all()
+        lobbies = []
+        lobby_length = all_lobbies.__len__()
+        for i in range(0, lobby_length):
+            user_num = User.objects.filter(lobby_id=(i+1)).__len__()
+            lobby = {
+                'user_num': user_num,
+                'lobby_name': all_lobbies[i].name
+            }
+            lobbies.append(lobby)
+        if new_user.password == password_again :
             if not has_same_uid(new_user):
                 new_user.save()
-                return HttpResponseRedirect("http://127.0.0.1:8000")
+                return render(request, 'index.html', {
+                    'Dict': json.dumps(dict1),
+                    'lobbies': lobbies,
+                    'form': form,
+                })
             else:
-                return HttpResponse("same name!")
+                dict1['reg'] = '1'
+                return render(request, 'index.html', {
+                    'Dict': json.dumps(dict1),
+                    'lobbies': lobbies,
+                    'form': form,
+                })
         else:
-            return HttpResponse("两次密码输入不一致！")
+            dict1['reg'] = '2'
+            return render(request, 'index.html', {
+                'Dict': json.dumps(dict1),
+                'lobbies': lobbies,
+                'form': form,
+            })
 
 
 # 处理用户登录事件
 def login(request):
     if request.method == 'POST':
+        if request.session['has_loggedin']:
+            from logic.models import User
+            cur_user = User.objects.get(uid=request.session['uid'])
+            userdict = {'uid': cur_user.uid, 'name': cur_user.name, 'iconnum': cur_user.iconnum}
+            all_lobbies = Lobby.objects.all()
+            lobbies =[]
+            lobby_length = all_lobbies.__len__()
+            for i in range(0, lobby_length):
+                 lobby = {
+                    'user_num': User.objects.filter(lobby_id=(i+1)).__len__(),
+                    'lobby_name': all_lobbies[i].name
+                 }
+                 lobbies.append(lobby)
+            into_lobby_form = IntoLobbyForm()
+            return render(request, 'login_complete.html', {
+                'Dict': json.dumps(userdict),
+                'lobbies': lobbies,
+                'into_lobby_form': into_lobby_form,
+            })
         from logic.models import User
         cur_user = User()
         form = RegisterForm(request.POST)
@@ -44,12 +97,12 @@ def login(request):
             if q.__len__() != 0:
                 cur_user.name = q[0].name
                 cur_user.uid = q[0].uid
-                q[0].lobby_id = 0
-                q[0].save()
-                userdict = {'uid': username, 'name': cur_user.name}
+                cur_user.iconnum = q[0].iconnum
+                userdict = {'uid': username, 'name': cur_user.name, 'iconnum': cur_user.iconnum}
+                request.session['has_loggedin'] = True
+                request.session['uid'] = cur_user.uid
                 all_lobbies = Lobby.objects.all()
-                lobbies = []
-                into_lobby_form = IntoLobbyForm()
+                lobbies =[]
                 lobby_length = all_lobbies.__len__()
                 for i in range(0, lobby_length):
                     lobby = {
@@ -57,13 +110,42 @@ def login(request):
                         'lobby_name': all_lobbies[i].name
                     }
                     lobbies.append(lobby)
+                into_lobby_form = IntoLobbyForm()
                 return render(request, 'login_complete.html', {
-                    'lobbies': lobbies,
                     'Dict': json.dumps(userdict),
+                    'lobbies': lobbies,
                     'into_lobby_form': into_lobby_form,
                 })
             else:
-                return HttpResponse("用户名或密码错误！")
+                all_lobbies = Lobby.objects.all()
+                lobbies = []
+                lobby_length = all_lobbies.__len__()
+                for i in range(0, lobby_length):
+                    lobby = {
+                        'user_num': User.objects.filter(lobby_id=(i+1)).__len__(),
+                        'lobby_name': all_lobbies[i].name
+                    }
+                    lobbies.append(lobby)
+                dict1 = {'login': '1', 'reg': '0'}
+                return render(request, 'index.html', {
+                    'Dict': json.dumps(dict1),
+                    'lobbies': lobbies,
+                    'form': form,
+                })
+
+    else:
+        form = RegisterForm()
+        all_lobbies = Lobby.objects.all()
+        lobbies = []
+        lobby_length = all_lobbies.__len__()
+        for i in range(0, lobby_length):
+            lobby = {
+                'user_num': User.objects.filter(lobby_id=(i+1)).__len__(),
+                'lobby_name': all_lobbies[i].name
+            }
+            lobbies.append(lobby)
+        return render_to_response("index.html",
+                            {'form': form, 'lobbies': lobbies, }, context_instance=RequestContext(request))
 
 
 # 处理修改密码事件
@@ -78,17 +160,18 @@ def changepassword(request):
         cur_user.save()
         all_lobbies = Lobby.objects.all()
         lobbies = []
-        into_lobby_form = IntoLobbyForm()
         lobby_length = all_lobbies.__len__()
         for i in range(0, lobby_length):
+            user_num = User.objects.filter(lobby_id=(i+1)).__len__()
             lobby = {
-                'user_num': User.objects.filter(lobby_id=(i+1)).__len__(),
+                'user_num': user_num,
                 'lobby_name': all_lobbies[i].name
             }
             lobbies.append(lobby)
+        into_lobby_form = IntoLobbyForm()
         return render(request, 'login_complete.html', {
-            'lobbies': lobbies,
             'Dict': json.dumps(userdict),
+            'lobbies': lobbies,
             'into_lobby_form': into_lobby_form,
         })
 
@@ -103,21 +186,38 @@ def changename(request):
         cur_user = User.objects.get(uid=uid)
         cur_user.name = name
         cur_user.iconnum = iconnum
-        userdict = {'uid': cur_user.uid, 'name': cur_user.name, 'iconnum': cur_user.iconnum}
+        userdict = {'uid': uid, 'name': name, 'iconnum': iconnum}
         cur_user.save()
         all_lobbies = Lobby.objects.all()
         lobbies = []
-        into_lobby_form = IntoLobbyForm()
         lobby_length = all_lobbies.__len__()
         for i in range(0, lobby_length):
+            user_num = User.objects.filter(lobby_id=(i+1)).__len__()
             lobby = {
-                'user_num': User.objects.filter(lobby_id=(i+1)).__len__(),
+                'user_num': user_num,
                 'lobby_name': all_lobbies[i].name
             }
             lobbies.append(lobby)
+        into_lobby_form = IntoLobbyForm()
         return render(request, 'login_complete.html', {
-            'lobbies': lobbies,
             'Dict': json.dumps(userdict),
+            'lobbies': lobbies,
             'into_lobby_form': into_lobby_form,
         })
 
+
+# 注销用户
+def relog(request):
+    form = RegisterForm()
+    all_lobbies = Lobby.objects.all()
+    lobbies = []
+    lobby_length = all_lobbies.__len__()
+    for i in range(0, lobby_length):
+        lobby = {
+            'user_num': User.objects.filter(lobby_id=(i+1)).__len__(),
+            'lobby_name': all_lobbies[i].name
+        }
+        lobbies.append(lobby)
+    request.session['has_loggedin'] = False
+    return render_to_response("index.html",
+                            {'form': form, 'lobbies': lobbies, }, context_instance=RequestContext(request))

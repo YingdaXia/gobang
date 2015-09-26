@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <link rel="stylesheet" type="text/css" href="/static/css/lobby.css">
+<link rel="stylesheet" type="text/css" href="/static/css/popwindow.css">
 <script type="text/javascript" src="/static/js/jquery-2.1.4.min.js"></script>
 <html>
 	<head>
@@ -16,8 +17,9 @@
 			</div>
 			<div id="userinformation">
 				<div id="username"></div>
-				<div id="userscore">积分：250</div>
+				<div id="userscore"></div>
 			</div>
+			<div id="all-score">总榜单</div>
 		</header>
 		
 		<section>
@@ -25,13 +27,9 @@
                 {% if lobby_id == 1 %}
                     {% for room in rooms %}
                     <div class="tables">
-                        <div class="leftuser"></div>
-                        {% if not room.game_id %}
-                            <div class="table" style="background-image: url('/static/image/lobby_emptytable.jpg')"></div>
-                        {% else %}
-                            <div class="table" style="background-image: url('/static/image/lobby_activetable.jpg')"></div>
-                        {% endif %}
-                        <div class="rightuser"></div>
+                        <div class="leftuser"><img class="leftuser_img" /></div>
+                        <div class="table" style="background-image: url('/static/image/lobby_emptytable.jpg')"></div>
+                        <div class="rightuser"><img class="rightuser_img" /></div>
                         <div class="tablenumber"></div>
                     </div>
                     {% endfor %}
@@ -49,161 +47,15 @@
 						<th width="32">平场</th>
 						<th width="32">负场</th>
 					</tr>
-					<tr class="tablerow">
-						<td>你爸</td>
-						<td>2</td>
-						<td>1</td>
-						<td>0</td>
-						<td>0</td>
-					</tr>
-					<tr class="tablerow">
-						<td>你的父亲</td>
-						<td>20</td>
-						<td>5</td>
-						<td>10</td>
-						<td>0</td>
-					</tr>
-                    <tr class="tablerow">
-						<td>你爸</td>
-						<td>2</td>
-						<td>1</td>
-						<td>0</td>
-						<td>0</td>
-					</tr>
-					<tr class="tablerow">
-						<td>你的父亲</td>
-						<td>20</td>
-						<td>5</td>
-						<td>10</td>
-						<td>0</td>
-					</tr>
-                    <tr class="tablerow">
-						<td>你爸</td>
-						<td>2</td>
-						<td>1</td>
-						<td>0</td>
-						<td>0</td>
-					</tr>
-					<tr class="tablerow">
-						<td>你的父亲</td>
-						<td>20</td>
-						<td>5</td>
-						<td>10</td>
-						<td>0</td>
-					</tr>
-                    <tr class="tablerow">
-						<td>你爸</td>
-						<td>2</td>
-						<td>1</td>
-						<td>0</td>
-						<td>0</td>
-					</tr>
-					<tr class="tablerow">
-						<td>你的父亲</td>
-						<td>20</td>
-						<td>5</td>
-						<td>10</td>
-						<td>0</td>
-					</tr>
-                    <tr class="tablerow">
-						<td>你爸</td>
-						<td>2</td>
-						<td>1</td>
-						<td>0</td>
-						<td>0</td>
-					</tr>
-					<tr class="tablerow">
-						<td>你的父亲</td>
-						<td>20</td>
-						<td>5</td>
-						<td>10</td>
-						<td>0</td>
-					</tr>
-                    <tr class="tablerow">
-						<td>你爸</td>
-						<td>2</td>
-						<td>1</td>
-						<td>0</td>
-						<td>0</td>
-					</tr>
-					<tr class="tablerow">
-						<td>你的父亲</td>
-						<td>20</td>
-						<td>5</td>
-						<td>10</td>
-						<td>0</td>
-					</tr>
-                    <tr class="tablerow">
-						<td>你爸</td>
-						<td>2</td>
-						<td>1</td>
-						<td>0</td>
-						<td>0</td>
-					</tr>
-					<tr class="tablerow">
-						<td>你的父亲</td>
-						<td>20</td>
-						<td>5</td>
-						<td>10</td>
-						<td>0</td>
-					</tr>
-                    <tr class="tablerow">
-						<td>你爸</td>
-						<td>2</td>
-						<td>1</td>
-						<td>0</td>
-						<td>0</td>
-					</tr>
-					<tr class="tablerow">
-						<td>你的父亲</td>
-						<td>20</td>
-						<td>5</td>
-						<td>10</td>
-						<td>0</td>
-					</tr>
-                    <tr class="tablerow">
-						<td>你爸</td>
-						<td>2</td>
-						<td>1</td>
-						<td>0</td>
-						<td>0</td>
-					</tr>
-					<tr class="tablerow">
-						<td>你的父亲</td>
-						<td>20</td>
-						<td>5</td>
-						<td>10</td>
-						<td>0</td>
-					</tr>
-                    <tr class="tablerow">
-						<td>你爸</td>
-						<td>2</td>
-						<td>1</td>
-						<td>0</td>
-						<td>0</td>
-					</tr>
-					<tr class="tablerow">
-						<td>你的父亲</td>
-						<td>20</td>
-						<td>5</td>
-						<td>10</td>
-						<td>0</td>
-					</tr>
-                    <tr class="tablerow">
-						<td>你爸</td>
-						<td>2</td>
-						<td>1</td>
-						<td>0</td>
-						<td>0</td>
-					</tr>
-					<tr class="tablerow">
-						<td>你的父亲</td>
-						<td>20</td>
-						<td>5</td>
-						<td>10</td>
-						<td>0</td>
-					</tr>
-
+                    {% for friend in friend_list %}
+                        <tr class="tablerow">
+                            <td>{{ friend.name }}</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                        </tr>
+                    {% endfor %}
 				</table>
 			</div>
 			<div id="userlist">
@@ -229,7 +81,7 @@
 			</div>
 		</section>
 
-        <form name="into_room_form" method="POST">
+        <form name="into_room_form" method="POST" target="_blank">
             {% csrf_token %}
             {{ into_room_form }}
         </form>
@@ -239,6 +91,8 @@
             $('#username').html(curr_user.name);
             var lobby_id = {{ lid|safe }};
         </script>
+        <script type="text/javascript" src="/static/js/onlinestatus.js"></script>
 		<script type="text/javascript" src="/static/js/lobby.js" charset="UTF-8"></script>
+		<script type="text/javascript" src="/static/js/popwindow.js"></script>
 	</body>
 </html>

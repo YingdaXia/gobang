@@ -14,53 +14,136 @@
 <body>
 	<div class="gobang_container">
 		<div class="player1 player">
-			<img class="player1_pic player_pic"/>
-			<div class="player1_info player_info">
-				<div class="player1_name">
-				</div>
-				<div class="player1_turntime">
-				</div>
-			</div>
-		</div>
-		<div class="player2 player">
-			<img class="player2_pic player_pic"/>
-			<div class="player1_info player_info">
-				<div class="player2_name">
-				</div>
-				<div class="player2_turntime">
-				</div>
-			</div>
-		</div>
+            <img class="player1_pic player_pic"/>
+            <div class="player1_info player_info">
+                <div class="player1_name">
+                </div>
+            </div>
+            <div class="timer" id="timer1">
+                30
+            </div>
+            <button class='kick' id="kick1">踢了他</button>
+            <img class="current_state current_state1">
+        </div>
+        <div class="player2 player">
+            <img class="player2_pic player_pic"/>
+            <div class="player1_info player_info">
+                <div class="player2_name">
+                </div>
+            </div>
+            <div class="timer" id="timer2">
+                30
+            </div>
+            <button class='kick' id="kick2">踢了他</button>
+            <img class="current_state current_state2">
+        </div>
 		<div class="checkerboard"  >
 			<img  onclick="addPiece()" class="checkerboard_img" src="/static/image/gobang_checkerboard.png"/>
 			<ul class="pieces">
 			</ul>
 			<a id="start_button" href="#" class="myButton">开始</a>
-			<a id="draw_button"href="#" class="myButton">求和</a>
-			<a id="pause_button" href="#" class="myButton">暂停</a>
-			<a id="giveup_button"href="#" class="myButton">认输</a>
+			<a id="draw_button" href="#" class="myButton">求和</a>
+			<a id="exit_button" href="#" class="myButton">退出</a>
+			<a id="giveup_button" class="myButton">认输</a>
 		</div>
-		<div class="user_info">
-			<p class="user_name">昵称：</p>
-			<p class="user_info_win_num">胜：</p>
-			<p class="user_info_tie_num">平：</p>
-			<p class="user_info_lose_num">负：</p>
-			<p class="user_info_win_rate">胜率：</p>
+		<div class="user_info user_info1">
+			<p class="user_name">昵称：<span class="user_name1"></span></p>
+            <p class="user_info_score">积分：<span class="user_info_score1"></span></p>
+			<p class="user_info_win_num">胜：<span class="user_info_win_num1"></span></p>
+			<p class="user_info_tie_num">平：<span class="user_info_tie_num1"></span></p>
+			<p class="user_info_lose_num">负：<span class="user_info_lose_num1"></span></p>
 		</div>
-		<div class="chatroom">
-			<ul class="chat_contents">
-			</ul>
-			<input type='text' id='messageInput'  placeholder='输入聊天内容'>
-			<a href="#" class="sendButton">发送</a>
+        <div class="user_info user_info2">
+			<p class="user_name">昵称：<span class="user_name2"></span></p>
+            <p class="user_info_score">积分：<span class="user_info_score2"></span></p>
+			<p class="user_info_win_num">胜：<span class="user_info_win_num2"></span></p>
+			<p class="user_info_tie_num">平：<span class="user_info_tie_num2"></span></p>
+			<p class="user_info_lose_num">负：<span class="user_info_lose_num2"></span></p>
 		</div>
-		
-	</div>
+    </div>
+    <div>
+        <div class="you_lose pop_out">
+            你输了
+            <button class="sure" id="sure_to_lost">确定</button>
+        </div>
+        <div class="you_win pop_out">
+            你赢了
+            <button class="sure" id="sure_to_win">确定</button>
+        </div>
+        <div class="confirm_give_up pop_out">
+            真的要认输吗
+            <button class="sure" id="sure_to_give_up">确定</button>
+            <button class="cancel" id="cancel_give_up">取消</button>
+        </div>
+        <div class="give_up pop_out">
+            对方认输
+            <button class="sure" id="close_give_up_pop_out">确定</button>
+        </div>
+        <div class="confirm_ask_for_draw pop_out">
+            真的要求和吗
+            <button class="sure" id="sure_to_ask_for_draw">确定</button>
+            <button class="cancel" id="cancel_ask_for_draw">取消</button>
+        </div>
+        <div class="ask_for_draw pop_out">
+            对方请求求和，是否同意
+            <button class="sure" id="allow_to_give_up">确定</button>
+            <button class="cancel" id="refuse_to_give_up">取消</button>
+        </div>
+    </div>
+
+    <form action="/add_step/" name="add_step_form" method="get">
+        {% csrf_token %}
+        {{ add_step_form }}
+    </form>
+
+    <form action="/get_new_step/" name="get_new_step_form" method="get">
+        {% csrf_token %}
+        {{ get_new_step_form }}
+    </form>
+
+    <form action="/game_over/" name="game_over_form" method="get">
+        {% csrf_token %}
+        {{ game_over_form }}
+    </form>
+
+    <form action="/wait_for_player/" name="wait_for_player_form" method="get">
+        {% csrf_token %}
+        {{ wait_for_player_form }}
+    </form>
+
+    <form action="/ready_for_game/" name="ready_for_game_form" method="get">
+        {% csrf_token %}
+        {{ ready_for_game_form }}
+    </form>
+
+    <form action="/wait_for_player_ready/" name="wait_for_player_ready_form" method="get">
+        {% csrf_token %}
+        {{ wait_for_player_ready_form }}
+    </form>
+
+    <form action="/save_player_game_request/" name="save_player_game_request_form" method="get">
+        {% csrf_token %}
+        {{ save_player_game_request_form }}
+    </form>
+
+    <form action="/load_player_game_request/" name="load_player_game_request_form" method="get">
+        {% csrf_token %}
+        {{ load_player_game_request_form }}
+    </form>
+
+    <form action="/init_room_info/" name="init_room_info_form" method="get">
+        {% csrf_token %}
+        {{ init_room_info_form }}
+    </form>
 
 	<script type="text/javascript">
+        var room = {{ room|safe }};
+        var user = {{ user|safe }};
         var player_1 = {{ player_1|safe }};
         var player_2 = {{ player_2|safe }};
         console.log(player_1);
         console.log(player_2);
+
 	    load_player_data();
 		init_gobang();
 	</script>

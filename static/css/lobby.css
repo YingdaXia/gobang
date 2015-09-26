@@ -36,6 +36,28 @@ header {
 	margin-bottom: 15px;
 }
 
+#all-score {
+	float: right;
+	margin-top: 30px;
+	margin-right: 30px;
+	background-color: #fff;
+	opacity: 0.8;
+	padding: 5px 10px;
+	font-size: 0.9em;
+	border-radius: 3px;
+	box-shadow: 3px 3px 10px #333;
+}
+
+#all-score:hover {
+	opacity: 0.5;
+	cursor: pointer;
+}
+
+#all-score:active {
+	position: relative;
+	top: 1px;
+}
+
 #userinformation {
 	float: left;
 	background-color: #fff;
@@ -50,6 +72,21 @@ header {
 
 #username {
 	margin-bottom: 10px;
+}
+
+#score-window {
+	position: absolute;
+	width: 400px;
+	height: 600px;
+	background-color: white;
+	box-shadow: 3px 3px 10px #444;
+	border-radius: 3px;
+	opacity: 0.9;
+}
+
+#score-window table {
+	margin-left: 30px;
+	overflow-y: scroll;
 }
 
 section {
@@ -104,14 +141,6 @@ section {
 	top: 1px;
 }
 
-.leftuser {
-	background-image: url("/static/image/lobby_leftchair.png");
-}
-
-.rightuser {
-	background-image: url("/static/image/lobby_rightchair.png");
-}
-
 .table {
 	float: left;
 	width: 50px;
@@ -153,7 +182,7 @@ section {
     overflow-y: scroll;
 }
 
-.tablelist tr th {
+.tablelist tr {
 	border-right: 1px solid #cbcbcb;
 	cursor: pointer;
 	color: #666666;
@@ -168,4 +197,23 @@ section {
 
 .tablerow:hover {
 	background-color: #D1EEEE;
+}
+
+#options {
+	background-color: #fff;
+	position: absolute;
+	box-shadow: 3px 3px 10px #000;
+}
+
+#options div {
+    font-size: 0.8em;
+    cursor: default;
+    text-align: center;
+    line-weight: 200%;
+    padding: 0px 10px;
+}
+
+#options div:hover {
+    background-color: rgb(80, 140, 235);
+    color: white;
 }

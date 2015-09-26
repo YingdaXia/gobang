@@ -1,0 +1,142 @@
+#small-window {
+	position: absolute;
+	background-color: rgb(236, 239, 243);
+	box-shadow: 0 0 10px #000;
+	font-size: 0.9em;
+	padding: 0 30px;
+	cursor: pointer;
+	color: #333333;
+}
+
+#pop-window {
+	position: absolute;
+	font-size: 0.8em;
+	box-shadow: 0 0 10px #000;
+	color: #333333;
+}
+
+#con-list {
+	float: left;
+	width: 199px;
+	height: 400px;
+	background-color: #fff;
+	border-right: 1px solid #ccc;
+	overflow-y: scroll;
+}
+
+.con-list-person {
+	width: 179px;
+	padding: 10px 0;
+}
+
+.con-list-person:hover {
+	cursor: pointer;
+	background-color: rgb(236, 239, 243);
+}
+
+.con-list-head {
+	margin-left: 10px;
+	width: 30px;
+	height: 30px;
+	vertical-align: middle;
+}
+
+.con-list-name {
+	margin-left: 10px;
+	vertical-align: middle;
+}
+
+.con-list-unread {
+	float: right;
+	margin-top: 6px;
+	width: 18px;
+	height: 18px;
+	border-radius: 50%;
+	background-color: rgb(245, 108, 11);
+	text-align: center;
+	line-height: 18px;
+	color: #fff;
+	font-size: 0.8em;
+}
+
+#con-title {
+	float: right;
+	background-color: #fff;
+	width: 400px;
+	height: 44px;
+	border-bottom: 1px solid #ccc;
+}
+
+#con-title-content {
+	float: left;
+	font-size: 1.2em;
+	width: 330px;
+	height: 44px;
+	line-height: 44px;
+	padding-left: 20px;
+	font-weight: bold;
+}
+
+#con-title-exit {
+	float: right;
+	margin-right: 20px;
+	font-size: 1.8em;
+}
+
+#con-title-exit, #score-window-exit {
+	background-color: transparent;
+	height: 44px;
+	line-height: 44px;
+	color: #696e78;
+	font-weight: bold;
+}
+
+#con-title-exit:hover, #score-window-exit:hover {
+	color: #eb7350;
+	cursor: pointer;
+}
+
+#con-content {
+	float: right;
+	background-color: rgb(242, 242, 245);
+	width: 400px;
+	height: 299px;
+	border-bottom: 1px solid #ccc;
+	overflow-y: scroll;
+}
+
+.con-content-row {
+	width: 362px;
+	padding: 5px 10px;
+}
+
+.con-content-head {
+	width: 30px;
+	height: 30px;
+	vertical-align: middle;
+}
+
+.con-content-bubble {
+	vertical-align: middle;
+	border-radius: 3px;
+	background-color: #fff;
+	box-shadow: 0 3px 10px #aaa;
+	line-height: 20px;
+	color: #333;
+	word-wrap: break-word;
+	padding: 5px 10px;
+}
+
+#con-input {
+	float: right;
+	background-color: #fff;
+	width: 400px;
+	height: 55px;
+}
+
+#con-input-textarea {
+	display: block;
+	width: 375px;
+	height: 38px;
+	margin: 5px 10px;
+}
